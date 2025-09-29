@@ -78,11 +78,18 @@ jobs:
             username:  ${{github.repository_owner}}
             password: ${{secrets.GITHUB_TOKEN}}
 
+        - name: Convert to lowercase
+          id: convert_to_lowercase
+          run: |
+            INPUT_STRING="${{ github.repository_owner }}"
+            LOWERCASE_STRING=$(echo "$INPUT_STRING" | tr '[:upper:]' '[:lower:]')
+            echo "LOWERCASE_VAR=$LOWERCASE_STRING" >> $GITHUB_OUTPUT
+
         - name: Docker Registry Push
           uses: docker/build-push-action@v4
           with:
             context: .
             push: true
             tags: | 
-              ghcr.io/${{github.repository_owner}}/solar-system:${{github.sha}}
+              ghcr.io/${{ steps.convert_to_lowercase.outputs.LOWERCASE_VAR}}/solar-system:${{github.sha}}
 
