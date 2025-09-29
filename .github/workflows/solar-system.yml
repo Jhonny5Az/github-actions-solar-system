@@ -67,6 +67,8 @@ jobs:
     docker:
       runs-on: ubuntu-latest
       needs: [unit-testing,code-coverage]
+      permissions: # Github token permission to write packages
+        packages: write
       steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
@@ -77,6 +79,13 @@ jobs:
             registry: ghcr.io
             username:  ${{github.repository_owner}}
             password: ${{secrets.GITHUB_TOKEN}}
+
+        - name: Convert to lowercase
+          id: convert_to_lowercase
+          run: |
+            INPUT_STRING="${{ github.repository_owner }}"
+            LOWERCASE_STRING=$(echo "$INPUT_STRING" | tr '[:upper:]' '[:lower:]')
+            echo "LOWERCASE_VAR=$LOWERCASE_STRING" >> $GITHUB_OUTPUT
 
         - name: Docker Registry Push
           uses: docker/build-push-action@v4
