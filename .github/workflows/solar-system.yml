@@ -119,7 +119,7 @@ jobs:
             kubectl -n default get pod
             sleep 10
 
-    integration-testing:
+    integration-test:
         needs: dev-deploy
         uses: ./.github/workflows/reusable-deployment.yml
         with:
