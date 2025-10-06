@@ -120,7 +120,7 @@ jobs:
             sleep 10
 
     integration-testing:
-        needs: [dev-deploy]
+        needs: dev-deploy
         uses: ./.github/workflows/reusable-deployment.yml
         with:
           ingress-url: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL }}
